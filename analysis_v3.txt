@@ -1,0 +1,13 @@
+Analyzing personal_time_table...                                
+
+   info • Unnecessary 'this.' qualifier • lib/models/timetable_entry.dart:78:8 • unnecessary_this
+   info • Unnecessary 'this.' qualifier • lib/models/timetable_entry.dart:103:18 • unnecessary_this
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/entry/entry_form_screen.dart:286:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/home/home_screen.dart:195:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/home/widgets/timeline_view.dart:95:45 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/views/settings/settings_screen.dart:130:9 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/widgets/common_widgets.dart:15:22 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/widgets/common_widgets.dart:17:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/widgets/splash_screen.dart:41:46 • deprecated_member_use
+
+9 issues found. (ran in 0.9s)

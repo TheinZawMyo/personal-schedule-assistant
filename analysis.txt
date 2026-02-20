@@ -1,0 +1,44 @@
+Analyzing personal_time_table...                                
+
+   info • 'background' is deprecated and shouldn't be used. Use surface instead. This feature was deprecated after v3.18.0-0.1.pre • lib/core/theme/app_theme.dart:16:9 • deprecated_member_use
+   info • 'onBackground' is deprecated and shouldn't be used. Use onSurface instead. This feature was deprecated after v3.18.0-0.1.pre • lib/core/theme/app_theme.dart:20:9 • deprecated_member_use
+  error • The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  • lib/core/theme/app_theme.dart:36:18 • argument_type_not_assignable
+   info • Unnecessary 'this.' qualifier • lib/models/timetable_entry.dart:78:8 • unnecessary_this
+   info • Unnecessary 'this.' qualifier • lib/models/timetable_entry.dart:103:18 • unnecessary_this
+  error • The function 'StateNotifierProvider' isn't defined • lib/providers/settings_provider.dart:5:26 • undefined_function
+  error • Classes can only extend other classes • lib/providers/settings_provider.dart:11:32 • extends_non_class
+  error • Too many positional arguments: 0 expected, but 1 found • lib/providers/settings_provider.dart:12:30 • extra_positional_arguments
+  error • Undefined name 'state' • lib/providers/settings_provider.dart:21:22 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/settings_provider.dart:23:7 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/settings_provider.dart:29:5 • undefined_identifier
+  error • The function 'StateNotifierProvider' isn't defined • lib/providers/timetable_provider.dart:7:5 • undefined_function
+  error • Classes can only extend other classes • lib/providers/timetable_provider.dart:11:33 • extends_non_class
+  error • Too many positional arguments: 0 expected, but 1 found • lib/providers/timetable_provider.dart:12:31 • extra_positional_arguments
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:20:5 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:25:5 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:25:17 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:31:5 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:32:23 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:39:19 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:41:5 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:41:13 • undefined_identifier
+  error • Undefined name 'state' • lib/providers/timetable_provider.dart:46:19 • undefined_identifier
+  error • The named parameter 'settings' is required, but there's no corresponding argument • lib/services/notification_service.dart:31:26 • missing_required_argument
+  error • Too many positional arguments: 0 expected, but 1 found • lib/services/notification_service.dart:32:7 • extra_positional_arguments_could_be_named
+  error • The named parameter 'id' is required, but there's no corresponding argument • lib/services/notification_service.dart:45:26 • missing_required_argument
+  error • The named parameter 'notificationDetails' is required, but there's no corresponding argument • lib/services/notification_service.dart:45:26 • missing_required_argument
+  error • The named parameter 'scheduledDate' is required, but there's no corresponding argument • lib/services/notification_service.dart:45:26 • missing_required_argument
+  error • Too many positional arguments: 0 expected, but 5 found • lib/services/notification_service.dart:46:7 • extra_positional_arguments_could_be_named
+  error • The named parameter 'uiLocalNotificationDateInterpretation' isn't defined • lib/services/notification_service.dart:60:7 • undefined_named_parameter
+  error • Undefined name 'UILocalNotificationDateInterpretation' • lib/services/notification_service.dart:61:11 • undefined_identifier
+  error • The named parameter 'id' is required, but there's no corresponding argument • lib/services/notification_service.dart:66:26 • missing_required_argument
+  error • Too many positional arguments: 0 expected, but 1 found • lib/services/notification_service.dart:66:33 • extra_positional_arguments_could_be_named
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/entry/entry_form_screen.dart:286:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/home/home_screen.dart:195:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/home/widgets/timeline_view.dart:95:45 • deprecated_member_use
+   info • 'activeColor' is deprecated and shouldn't be used. Use activeThumbColor instead. This feature was deprecated after v3.31.0-2.0.pre • lib/views/settings/settings_screen.dart:130:9 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/widgets/common_widgets.dart:15:22 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/widgets/common_widgets.dart:17:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/views/widgets/splash_screen.dart:41:46 • deprecated_member_use
+
+40 issues found. (ran in 0.9s)
