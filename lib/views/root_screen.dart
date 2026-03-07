@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'home/home_screen.dart';
 import 'stats/stats_screen.dart';
+import 'challenges/challenges_screen.dart';
 import 'settings/settings_screen.dart';
 import '../core/theme/app_colors.dart';
 
@@ -17,6 +18,7 @@ class _RootScreenState extends State<RootScreen> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
+    const ChallengesScreen(),
     const StatsScreen(),
     const SettingsScreen(),
   ];
@@ -53,6 +55,11 @@ class _RootScreenState extends State<RootScreen> {
                 color: AppColors.primary,
               ),
               label: 'Daily',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(LucideIcons.trophy),
+              activeIcon: Icon(LucideIcons.trophy, color: AppColors.primary),
+              label: 'Challenges',
             ),
             BottomNavigationBarItem(
               icon: Icon(LucideIcons.barChart3),

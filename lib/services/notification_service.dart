@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -152,6 +153,8 @@ class NotificationService {
           priority: Priority.max,
           fullScreenIntent: true,
           category: AndroidNotificationCategory.reminder,
+          icon: '@mipmap/ic_launcher',
+          color: const Color(0xFF2979FF),
           actions: <AndroidNotificationAction>[
             const AndroidNotificationAction('snooze', 'Snooze 10 min'),
             const AndroidNotificationAction('dismiss', 'Dismiss'),
@@ -180,7 +183,7 @@ class NotificationService {
       title: '🔴 Now: $title',
       body: 'Ends at $endTimeStr',
       scheduledDate: _toTZDateTime(startTime),
-      notificationDetails: const NotificationDetails(
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           'ongoing_activity',
           'Ongoing Activity',
@@ -188,8 +191,55 @@ class NotificationService {
           priority: Priority.high,
           ongoing: true,
           autoCancel: false,
+          icon: '@mipmap/ic_launcher',
+          color: const Color(0xFF2979FF),
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
+  }
+
+  Future<void> scheduleChallengeNotification({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime scheduledTime,
+    String? payload,
+  }) async {
+    await scheduleNotification(
+      id: id + 200000,
+      title: '🏆 Challenge: $title',
+      body: body,
+      scheduledTime: scheduledTime,
+      payload: payload,
+    );
+  }
+
+  Future<void> scheduleChallengeOngoingNotification({
+    required int id,
+    required String title,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    final endDateStr = DateFormat('yMMMd').format(endDate);
+    await _notifications.zonedSchedule(
+      id: id + 250000,
+      title: '🔥 Active Challenge: $title',
+      body: 'Ongoing until $endDateStr',
+      scheduledDate: _toTZDateTime(startDate),
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(
+          'ongoing_challenge',
+          'Ongoing Challenge',
+          importance: Importance.low,
+          priority: Priority.low,
+          ongoing: true,
+          autoCancel: false,
+          icon: '@mipmap/ic_launcher',
+          color: const Color(0xFF2979FF),
+        ),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
@@ -219,7 +269,7 @@ class NotificationService {
       ..sort((a, b) => a.startTime.compareTo(b.startTime));
 
     final summary = sorted
-        .take(3)
+        .take(10) // Show up to 10 tasks instead of 3
         .map((e) {
           final time = DateFormat('HH:mm').format(e.startTime);
           return '$time ${e.title}';
@@ -229,19 +279,20 @@ class NotificationService {
     await _notifications.zonedSchedule(
       id: morningSummaryId,
       title: 'Your Schedule for Today',
-      body: summary,
+      body: summary.isEmpty ? 'No tasks scheduled for today.' : summary,
       scheduledDate: scheduledDate,
-      notificationDetails: const NotificationDetails(
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           'morning_summary',
           'Morning Summary',
           importance: Importance.max,
           priority: Priority.max,
+          icon: '@mipmap/ic_launcher',
+          color: const Color(0xFF2979FF),
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
   }
 
@@ -254,6 +305,8 @@ class NotificationService {
           channelDescription: 'Channel for testing notifications',
           importance: Importance.max,
           priority: Priority.max,
+          icon: '@mipmap/ic_launcher',
+          color: const Color(0xFF2979FF),
         );
     const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
       presentAlert: true,

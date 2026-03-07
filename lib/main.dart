@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'core/theme/app_theme.dart';
 import 'models/timetable_entry.dart';
 import 'models/settings_model.dart';
+import 'models/challenge.dart';
 import 'services/notification_service.dart';
 import 'providers/settings_provider.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -22,6 +23,7 @@ void main() async {
   Hive.registerAdapter(RepeatCycleAdapter());
   Hive.registerAdapter(TimetableEntryAdapter());
   Hive.registerAdapter(SettingsModelAdapter());
+  Hive.registerAdapter(ChallengeAdapter());
 
   // Initialize Notifications
   final notificationService = NotificationService();

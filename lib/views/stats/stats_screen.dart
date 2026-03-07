@@ -4,8 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../providers/timetable_provider.dart';
+import '../../providers/challenge_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../models/timetable_entry.dart';
+import '../../models/challenge.dart';
 
 class StatsScreen extends ConsumerWidget {
   const StatsScreen({super.key});
@@ -13,6 +15,7 @@ class StatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final entries = ref.watch(timetableProvider);
+    final challenges = ref.watch(challengeProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Statistics')),
@@ -21,7 +24,13 @@ class StatsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildQuickStats(context, entries),
+            _buildQuickStats(context, entries, challenges),
+            const SizedBox(height: 32),
+            _buildSectionTitle(context, 'Challenge Progress'),
+            const SizedBox(height: 16),
+            challenges.isEmpty
+                ? _buildEmptyChallengesState(context)
+                : _buildChallengesList(context, challenges),
             const SizedBox(height: 32),
             _buildSectionTitle(context, 'Category Breakdown'),
             const SizedBox(height: 16),
@@ -47,28 +56,60 @@ class StatsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickStats(BuildContext context, List<TimetableEntry> entries) {
+  Widget _buildQuickStats(
+    BuildContext context,
+    List<TimetableEntry> entries,
+    List<Challenge> challenges,
+  ) {
     final totalCompleted = entries.where((e) => e.isCompleted).length;
     final completionRate = entries.isEmpty
         ? 0
         : (totalCompleted / entries.length * 100).toInt();
 
-    return Row(
+    final activeChallenges = challenges
+        .where((c) => c.endDate.isAfter(DateTime.now()))
+        .length;
+
+    return Column(
       children: [
-        _buildStatCard(
-          context,
-          'Total Tasks',
-          entries.length.toString(),
-          LucideIcons.listTodo,
-          AppColors.primary,
+        Row(
+          children: [
+            _buildStatCard(
+              context,
+              'Total Tasks',
+              entries.length.toString(),
+              LucideIcons.listTodo,
+              AppColors.primary,
+            ),
+            const SizedBox(width: 16),
+            _buildStatCard(
+              context,
+              'Completion',
+              '$completionRate%',
+              LucideIcons.checkCircle2,
+              AppColors.accent,
+            ),
+          ],
         ),
-        const SizedBox(width: 16),
-        _buildStatCard(
-          context,
-          'Completion',
-          '$completionRate%',
-          LucideIcons.checkCircle2,
-          AppColors.accent,
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            _buildStatCard(
+              context,
+              'Active Challenges',
+              activeChallenges.toString(),
+              LucideIcons.trophy,
+              Colors.orange,
+            ),
+            const SizedBox(width: 16),
+            _buildStatCard(
+              context,
+              'Total Goals',
+              challenges.length.toString(),
+              LucideIcons.target,
+              Colors.green,
+            ),
+          ],
         ),
       ],
     );
@@ -110,6 +151,79 @@ class StatsScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildChallengesList(
+    BuildContext context,
+    List<Challenge> challenges,
+  ) {
+    final now = DateTime.now();
+    return Column(
+      children: challenges.take(3).map((c) {
+        final totalDays = c.endDate.difference(c.startDate).inDays + 1;
+        final currentDay = c.startDate.isAfter(now)
+            ? 0
+            : now.difference(c.startDate).inDays + 1;
+        final progress = (currentDay / totalDays).clamp(0.0, 1.0);
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    c.title,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text('${(progress * 100).toInt()}%'),
+                ],
+              ),
+              const SizedBox(height: 8),
+              LinearProgressIndicator(
+                value: progress,
+                backgroundColor: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(10),
+                minHeight: 6,
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildEmptyChallengesState(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            LucideIcons.trophy,
+            color: Colors.grey.withOpacity(0.3),
+            size: 48,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'No active challenges',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ],
       ),
     );
   }
@@ -162,7 +276,6 @@ class StatsScreen extends ConsumerWidget {
   ) {
     if (entries.isEmpty) return const Center(child: Text('No data available'));
 
-    // Get the last 7 days including today
     final now = DateTime.now();
     final last7Days = List.generate(7, (i) {
       final date = now.subtract(Duration(days: 6 - i));
@@ -170,7 +283,7 @@ class StatsScreen extends ConsumerWidget {
     });
 
     final List<BarChartGroupData> barGroups = [];
-    double maxCount = 5; // Default max for scaling
+    double maxCount = 5;
 
     for (int i = 0; i < last7Days.length; i++) {
       final day = last7Days[i];
@@ -197,9 +310,7 @@ class StatsScreen extends ConsumerWidget {
               backDrawRodData: BackgroundBarChartRodData(
                 show: true,
                 toY: maxCount,
-                color: Theme.of(
-                  context,
-                ).colorScheme.surface.withValues(alpha: 0.5),
+                color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
               ),
             ),
           ],
@@ -249,11 +360,10 @@ class StatsScreen extends ConsumerWidget {
                 showTitles: true,
                 getTitlesWidget: (value, meta) {
                   final index = value.toInt();
-                  if (index < 0 || index >= last7Days.length) {
+                  if (index < 0 || index >= last7Days.length)
                     return const Text('');
-                  }
                   final day = last7Days[index];
-                  final label = DateFormat('E').format(day)[0]; // First letter
+                  final label = DateFormat('E').format(day)[0];
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
